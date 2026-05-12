@@ -14,8 +14,9 @@
 }
 html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text)}
 #app{width:100vw;height:100vh;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
-#bg-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:all .8s ease;z-index:0}
-#bg-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,12,20,.97) 0%,rgba(10,12,20,.65) 55%,rgba(10,12,20,.4) 100%);z-index:1}
+#bg-wrap{position:absolute;inset:0;z-index:0;overflow:hidden}
+#bg-wrap img{width:100%;height:100%;object-fit:cover;object-position:center;transition:opacity .8s ease}
+#bg-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,12,20,.97) 0%,rgba(10,12,20,.65) 55%,rgba(10,12,20,.35) 100%);z-index:1}
 #content{position:relative;z-index:2;width:100%;max-width:760px;padding:20px 20px 28px;display:flex;flex-direction:column;align-items:center}
 #brand{position:absolute;top:20px;left:50%;transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:10px}
 .brand-logo{font-size:19px;font-weight:800;letter-spacing:-.5px}.brand-logo span{color:var(--blue)}
@@ -58,7 +59,7 @@ html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:
 </head>
 <body>
 <div id="app">
-  <div id="bg-img"></div>
+  <div id="bg-wrap"><img id="bg-img" src="" alt="" /></div>
   <div id="bg-overlay"></div>
   <div id="brand">
     <div class="brand-logo">Repair<span>Hub</span></div>
@@ -83,18 +84,18 @@ choices:[{e:"🚶",m:"Head to RepairHub",s:"Let's see what this place is about",
 
 {bg:"linear-gradient(135deg,#0a0c14 0%,#0a1628 100%)",img:BASE+"scene2.jpeg",icon:"🏪",om:"OM: Arrival Queue (Buffer)",
 title:"You arrive at RepairHub.",visual:"🏙️🚶‍♂️➡️🏪",
-text:`The store is clean and modern. A short queue forms at the entrance counter — this is the <strong>arrival buffer</strong>, holding customers until the counter is free.<br><br>You wait about <strong>3 minutes</strong>.`,
+text:`The store is clean and modern. A short queue forms at the entrance — this is the <strong>arrival buffer</strong>, holding customers until the counter is free.<br><br>You wait about <strong>3 minutes</strong>.`,
 choices:[{e:"➡️",m:"Walk up to the counter",s:"It's your turn",n:2}]},
 
 {bg:"linear-gradient(135deg,#0a0c14 0%,#00101a 100%)",img:BASE+"scene3.jpeg",icon:"📷",om:"OM: Activity — Counter Registration",
 title:"Place your phone under the camera.",visual:"📱🔍💻",
-text:`The counter has a <strong>built-in camera and a touchscreen tablet</strong>. You place your cracked phone under the camera. It scans instantly.<br><br>You confirm on the tablet: <strong>Samsung Galaxy S24</strong>. Damage: <em>Cracked screen</em>. The AI cross-references camera image with your selection.`,
+text:`The counter has a <strong>built-in camera and a touchscreen tablet</strong>. You place your cracked phone under the camera. It scans instantly.<br><br>You confirm on the tablet: <strong>Samsung Galaxy S24</strong>. Damage: <em>Cracked screen</em>.`,
 choices:[{e:"✅",m:"Confirm: Samsung Galaxy S24, cracked screen",s:"System recognises your model automatically",n:3}]},
 
 {bg:"linear-gradient(135deg,#0a0c14 0%,#0d0a1f 100%)",img:BASE+"scene4.jpeg",icon:"🤖",om:"OM: AI Diagnosis + Inventory Check (ROP) + VUT Queueing",
 title:"The AI is running its checks…",visual:"⚙️🔄📦",
-text:`In seconds, the AI does three things internally:<br><br><strong>1.</strong> Identifies repair — screen replacement, ~55 min.<br><strong>2.</strong> Checks stock via <strong>Reorder Point (ROP)</strong> — part in stock ✅<br><strong>3.</strong> Calculates your wait using the <strong>VUT queueing model</strong>.`,
-info:[{l:"Repair type",v:"Screen replacement",c:"val-blue"},{l:"Processing time (p_i)",v:"55 min",c:""},{l:"Part in stock?",v:"✅ Yes (qty: 4)",c:"val-green"},{l:"Technicians available",v:"3 working",c:""},{l:"Queue wait (W_q)",v:"~18 min",c:"val-orange"},{l:"Estimated total wait",v:"~73 min",c:"val-orange"}],
+text:`In seconds, the AI does three things:<br><br><strong>1.</strong> Identifies repair — screen replacement, ~55 min.<br><strong>2.</strong> Checks stock via <strong>Reorder Point (ROP)</strong> — part in stock ✅<br><strong>3.</strong> Calculates wait using the <strong>VUT queueing model</strong>.`,
+info:[{l:"Repair type",v:"Screen replacement",c:"val-blue"},{l:"Processing time",v:"55 min",c:""},{l:"Part in stock?",v:"✅ Yes (qty: 4)",c:"val-green"},{l:"Technicians available",v:"3 working",c:""},{l:"Queue wait (W_q)",v:"~18 min",c:"val-orange"},{l:"Estimated total",v:"~73 min",c:"val-orange"}],
 choices:[{e:"👀",m:"See your quote",s:"The system now shows you the full offer",n:4}]},
 
 {bg:"linear-gradient(135deg,#0a0c14 0%,#0a1a0a 100%)",img:BASE+"scene4.jpeg",icon:"💬",om:"OM: Single Customer Decision Point",
@@ -103,31 +104,31 @@ text:`The tablet shows you the full offer. <strong>This is the only decision poi
 info:[{l:"Repair",v:"Screen replacement — Samsung S24",c:"val-blue"},{l:"Price",v:"€ 129",c:""},{l:"Ready by",v:"Today ~14:45",c:"val-green"},{l:"Part",v:"In stock ✅",c:"val-green"},{l:"Warranty",v:"12 months",c:""}],
 choices:[
   {e:"⚡",m:"Yes — fix it today!",s:"Same-day repair · ready ~14:45 · €129",n:5,hi:"green"},
-  {e:"📅",m:"Book a future appointment",s:"Part reserved, replenishment triggered on your confirmation",n:7},
-  {e:"❌",m:"No thanks, I'll pass",s:"Leave without repair — lost demand for the process",n:8}
+  {e:"📅",m:"Book a future appointment",s:"Part reserved, replenishment triggered on confirmation",n:7},
+  {e:"❌",m:"No thanks, I'll pass",s:"Leave without repair — lost demand",n:8}
 ]},
 
 {bg:"linear-gradient(135deg,#0a0c14 0%,#0a0014 100%)",img:BASE+"scene6.jpeg",icon:"🔧",om:"OM: Repair Queue → Technician Activity → QC",
 title:"Your phone is being repaired.",visual:"🔧📱⚡",
-text:`Your job enters the <strong>repair queue</strong>. A technician picks it up and gets to work. You grab a coffee nearby. SMS notification when it's done.<br><br>Technician replaces the screen module, runs diagnostics, then hands to quality control.`,
+text:`Your job enters the <strong>repair queue</strong>. A technician picks it up and gets to work. You grab a coffee nearby.<br><br>Technician replaces the screen module, runs diagnostics, then hands to quality control.`,
 stages:["Repair Queue","Disassembly","Screen Replaced","QC & Test","Done ✅"],active:4,
 choices:[{e:"🔔",m:"You got the SMS — pick up your phone!",s:"Quality control passed ✅",n:6}]},
 
 {bg:"linear-gradient(135deg,#0a0c14 0%,#052e16 100%)",img:BASE+"scene7.jpeg",icon:"🎉",om:"OM: Pickup Buffer → Satisfied Demand",
 title:"Your phone is fixed. Good as new.",visual:"📱✨🙌",
-text:`You return to the store. Service advisor hands you your phone — <strong>screen perfect, warranty card inside</strong>. Total time walk-in to pickup: <strong>91 minutes</strong>.<br><br>Same-day promise: <strong>kept</strong>. You're back online.`,
+text:`You return to the store. Service advisor hands you your phone — <strong>screen perfect, warranty card inside</strong>. Total time walk-in to pickup: <strong>91 minutes</strong>.<br><br>Same-day promise: <strong>kept</strong>.`,
 info:[{l:"Walk-in time",v:"13:10",c:""},{l:"Queue wait",v:"18 min",c:"val-orange"},{l:"Repair time",v:"55 min",c:""},{l:"QC",v:"8 min",c:""},{l:"Pickup",v:"14:41",c:"val-green"},{l:"Total time",v:"91 min ✅",c:"val-green"},{l:"Cost",v:"€ 129",c:""}],
 choices:[{e:"🔁",m:"Play again — try a different path",s:"Go back to the beginning",n:0,hi:"green"}]},
 
-{bg:"linear-gradient(135deg,#0a0c14 0%,#1a0a00 100%)",img:BASE+"scene8.jpeg",icon:"📅",om:"OM: Scheduled Repair Path — replenishment on confirmation only",
+{bg:"linear-gradient(135deg,#0a0c14 0%,#1a0a00 100%)",img:BASE+"scene8.jpeg",icon:"📅",om:"OM: Scheduled Repair — replenishment on confirmation only",
 title:"Appointment booked. Part reserved.",visual:"📅📦🔒",
 text:`You choose <strong>Thursday 10:00</strong>. The system reserves the part and triggers replenishment <strong>only now — because you confirmed.</strong><br><br>No wasted inventory. SMS confirmation + reminder the day before.`,
-info:[{l:"Appointment",v:"Thursday 10:00",c:"val-blue"},{l:"Part reserved",v:"Samsung S24 screen ✅",c:"val-green"},{l:"Replenishment triggered",v:"On your confirmation",c:"val-orange"},{l:"Price",v:"€ 129 (locked in)",c:""}],
+info:[{l:"Appointment",v:"Thursday 10:00",c:"val-blue"},{l:"Part reserved",v:"Samsung S24 screen ✅",c:"val-green"},{l:"Replenishment",v:"Triggered on confirmation",c:"val-orange"},{l:"Price",v:"€ 129 (locked in)",c:""}],
 choices:[{e:"🔁",m:"Start over — try same-day path",s:"See what happens if you approve immediately",n:0}]},
 
 {bg:"linear-gradient(135deg,#0a0c14 0%,#1a0000 100%)",img:null,icon:"🚶",om:null,
 title:"You walk away.",visual:"🚶‍♂️💨📱💔",
-text:`You decide not to go ahead. <strong>No part reserved, no technician time allocated.</strong> The demand simply doesn't enter the system.<br><br>From an OM perspective: <em>lost demand</em>.`,
+text:`You decide not to go ahead. <strong>No part reserved, no technician time allocated.</strong><br><br>From an OM perspective: <em>lost demand</em>.`,
 choices:[{e:"🔁",m:"Try again — maybe approve this time?",s:"Go back to the beginning",n:0}]},
 ];
 
@@ -174,14 +175,18 @@ function render(idx,dir){
       d.className='dot'+(i===idx?' active':i<idx?' done':'');
       dotsEl.appendChild(d);
     });
-    const bgEl=document.getElementById('bg-img');
+    const bgImg=document.getElementById('bg-img');
+    const bgWrap=document.getElementById('bg-wrap');
     if(sc.img){
-      const img=new Image();
-      img.onload=()=>{bgEl.style.backgroundImage=`url('${sc.img}')`;bgEl.style.background=''};
-      img.onerror=()=>{bgEl.style.backgroundImage='';bgEl.style.background=sc.bg};
-      img.src=sc.img;
+      bgImg.style.opacity='0';
+      bgImg.onload=()=>{bgImg.style.opacity='1'};
+      bgImg.onerror=()=>{bgImg.style.opacity='0'};
+      bgImg.src=sc.img;
+      bgWrap.style.background='';
     } else {
-      bgEl.style.backgroundImage='';bgEl.style.background=sc.bg;
+      bgImg.src='';
+      bgImg.style.opacity='0';
+      bgWrap.style.background=sc.bg;
     }
     card.style.transition='opacity .35s ease,transform .35s ease';
     requestAnimationFrame(()=>{card.style.opacity='1';card.style.transform='translateY(0)'});
