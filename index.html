@@ -16,12 +16,12 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 #app{width:100vw;height:100vh;display:flex;flex-direction:column;align-items:center;overflow:hidden}
 
 /* TOP BAR */
-#topbar{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;flex-shrink:0;z-index:10}
-.brand-logo{font-size:18px;font-weight:800;letter-spacing:-.5px}.brand-logo span{color:var(--blue)}
-.brand-tag{font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:99px;padding:3px 10px}
+#topbar{width:100%;max-width:680px;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;flex-shrink:0}
 #back-btn{background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:99px;padding:6px 14px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:6px;transition:all .18s}
 #back-btn:hover{background:var(--card2);color:var(--text);border-color:#3b82f6}
 #back-btn:disabled{opacity:0;pointer-events:none}
+.brand-logo{font-size:18px;font-weight:800;letter-spacing:-.5px}.brand-logo span{color:var(--blue)}
+.brand-tag{font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:99px;padding:3px 10px}
 
 /* PROGRESS */
 #progress-wrap{width:100%;max-width:680px;padding:0 20px 10px;flex-shrink:0}
@@ -29,14 +29,19 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 .prog-bar-bg{height:3px;background:var(--border);border-radius:99px;overflow:hidden}
 .prog-bar-fill{height:100%;background:var(--blue);border-radius:99px;transition:width .5s ease}
 
-/* SCENE IMAGE */
+/* SCENE IMAGE — full natural height, no crop */
 #scene-img-wrap{width:100%;max-width:680px;padding:0 20px;flex-shrink:0}
-#scene-img{width:100%;height:260px;object-fit:cover;border-radius:14px;display:block;background:var(--card2);transition:opacity .4s ease}
+#scene-img{width:100%;height:auto;display:block;border-radius:14px;background:var(--card2);transition:opacity .4s ease}
 #scene-img.hidden{opacity:0}
-#scene-img-placeholder{width:100%;height:260px;border-radius:14px;background:var(--card2);display:none;align-items:center;justify-content:center;font-size:72px}
+
+/* DOTS */
+#dots{display:flex;gap:6px;justify-content:center;padding:10px 0 4px;flex-shrink:0}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:all .3s}
+.dot.active{background:var(--blue);width:18px;border-radius:99px}
+.dot.done{background:var(--green)}
 
 /* SCROLL AREA */
-#scroll-area{width:100%;max-width:680px;padding:0 20px 20px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:12px;margin-top:12px}
+#scroll-area{width:100%;max-width:680px;padding:0 20px 20px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px}
 
 /* CARD */
 #scene-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;transition:opacity .3s ease,transform .3s ease}
@@ -64,23 +69,17 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 .choice-btn .tx .sub{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
 .choice-btn:hover .tx .sub{color:#93c5fd}
 .green-btn{background:#14532d;border-color:#22c55e}.green-btn:hover{background:#166534}
-
-/* DOTS */
-#dots{display:flex;gap:6px;justify-content:center;padding:8px 0 4px;flex-shrink:0}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:all .3s}
-.dot.active{background:var(--blue);width:18px;border-radius:99px}
-.dot.done{background:var(--green)}
 </style>
 </head>
 <body>
 <div id="app">
 
   <div id="topbar">
-    <div style="display:flex;align-items:center;gap:10px">
+    <button id="back-btn" onclick="goBack()">← Back</button>
+    <div style="display:flex;align-items:center;gap:8px">
       <div class="brand-logo">Repair<span>Hub</span></div>
       <div class="brand-tag">Customer Journey · OM Capstone</div>
     </div>
-    <button id="back-btn" onclick="goBack()">← Back</button>
   </div>
 
   <div id="progress-wrap">
@@ -103,28 +102,28 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 <script>
 const BASE="https://raw.githubusercontent.com/mrtn25/repairhub-customer-journey/main/images/";
 const S=[
-{img:BASE+"scene1.jpeg",icon:"😱",om:null,
+{img:BASE+"scene1.jpeg",om:null,
 title:"Oh no. Your phone just cracked.",
 text:`You drop your phone and the screen shatters. <strong>No insurance, no backup.</strong> As a consultant you need it fixed today.<br><br>Luckily a friend texts you: <em>"There's this place downtown — RepairHub. Super fast, totally legit."</em>`,
 choices:[{e:"🚶",m:"Head to RepairHub",s:"Let's see what this place is about",n:1}]},
 
-{img:BASE+"scene2.jpeg",icon:"🏪",om:"OM: Arrival Queue (Buffer)",
+{img:BASE+"scene2.jpeg",om:"OM: Arrival Queue (Buffer)",
 title:"You arrive at RepairHub.",
 text:`The store is clean and modern. A short queue forms at the entrance — this is the <strong>arrival buffer</strong>, holding customers until the counter is free.<br><br>You wait about <strong>3 minutes</strong>.`,
 choices:[{e:"➡️",m:"Walk up to the counter",s:"It's your turn",n:2}]},
 
-{img:BASE+"scene3.jpeg",icon:"📷",om:"OM: Activity — Counter Registration",
+{img:BASE+"scene3.jpeg",om:"OM: Activity — Counter Registration",
 title:"Place your phone under the camera.",
 text:`The counter has a <strong>built-in camera and a touchscreen tablet</strong>. You place your cracked phone under the camera. It scans instantly.<br><br>You confirm on the tablet: <strong>Samsung Galaxy S24</strong>. Damage: <em>Cracked screen</em>. The AI cross-references the camera image with your selection.`,
 choices:[{e:"✅",m:"Confirm: Samsung Galaxy S24, cracked screen",s:"System recognises your model automatically",n:3}]},
 
-{img:BASE+"scene4.jpeg",icon:"🤖",om:"OM: AI Diagnosis + Inventory Check (ROP) + VUT Queueing",
+{img:BASE+"scene4.jpeg",om:"OM: AI Diagnosis + Inventory Check (ROP) + VUT Queueing",
 title:"The AI is running its checks…",
 text:`In seconds, the AI does three things internally:<br><br><strong>1.</strong> Identifies repair — screen replacement, ~55 min.<br><strong>2.</strong> Checks stock via <strong>Reorder Point (ROP)</strong> — part in stock ✅<br><strong>3.</strong> Calculates your wait using the <strong>VUT queueing model</strong>.`,
 info:[{l:"Repair type",v:"Screen replacement",c:"val-blue"},{l:"Processing time",v:"55 min",c:""},{l:"Part in stock?",v:"✅ Yes (qty: 4)",c:"val-green"},{l:"Technicians available",v:"3 working",c:""},{l:"Queue wait (W_q)",v:"~18 min",c:"val-orange"},{l:"Estimated total",v:"~73 min",c:"val-orange"}],
 choices:[{e:"👀",m:"See your quote",s:"The system now shows you the full offer",n:4}]},
 
-{img:BASE+"scene4.jpeg",icon:"💬",om:"OM: Single Customer Decision Point",
+{img:BASE+"scene4.jpeg",om:"OM: Single Customer Decision Point",
 title:"Here's your personalised quote.",
 text:`The tablet shows you the full offer. <strong>This is the only decision point in the process.</strong> What do you want to do?`,
 info:[{l:"Repair",v:"Screen replacement — Samsung S24",c:"val-blue"},{l:"Price",v:"€ 129",c:""},{l:"Ready by",v:"Today ~14:45",c:"val-green"},{l:"Part",v:"In stock ✅",c:"val-green"},{l:"Warranty",v:"12 months",c:""}],
@@ -134,25 +133,25 @@ choices:[
   {e:"❌",m:"No thanks, I'll pass",s:"Leave without repair — lost demand for the process",n:8}
 ]},
 
-{img:BASE+"scene6.jpeg",icon:"🔧",om:"OM: Repair Queue → Technician Activity → QC",
+{img:BASE+"scene6.jpeg",om:"OM: Repair Queue → Technician Activity → QC",
 title:"Your phone is being repaired.",
 text:`Your job enters the <strong>repair queue</strong>. A technician picks it up and gets to work. You grab a coffee nearby. SMS notification when it's done.<br><br>Technician replaces the screen module, runs diagnostics, then hands to quality control.`,
 stages:["Repair Queue","Disassembly","Screen Replaced","QC & Test","Done ✅"],active:4,
 choices:[{e:"🔔",m:"You got the SMS — pick up your phone!",s:"Quality control passed ✅",n:6}]},
 
-{img:BASE+"scene7.jpeg",icon:"🎉",om:"OM: Pickup Buffer → Satisfied Demand",
+{img:BASE+"scene7.jpeg",om:"OM: Pickup Buffer → Satisfied Demand",
 title:"Your phone is fixed. Good as new.",
 text:`You return to the store. Service advisor hands you your phone — <strong>screen perfect, warranty card inside</strong>. Total time walk-in to pickup: <strong>91 minutes</strong>.<br><br>Same-day promise: <strong>kept</strong>. You're back online.`,
 info:[{l:"Walk-in time",v:"13:10",c:""},{l:"Queue wait",v:"18 min",c:"val-orange"},{l:"Repair time",v:"55 min",c:""},{l:"QC",v:"8 min",c:""},{l:"Pickup",v:"14:41",c:"val-green"},{l:"Total time",v:"91 min ✅",c:"val-green"},{l:"Cost",v:"€ 129",c:""}],
 choices:[{e:"🔁",m:"Play again — try a different path",s:"Go back to the beginning",n:0,hi:"green"}]},
 
-{img:BASE+"scene8.jpeg",icon:"📅",om:"OM: Scheduled Repair — replenishment on confirmation only",
+{img:BASE+"scene8.jpeg",om:"OM: Scheduled Repair — replenishment on confirmation only",
 title:"Appointment booked. Part reserved.",
 text:`You choose <strong>Thursday 10:00</strong>. The system reserves the part and triggers replenishment <strong>only now — because you confirmed.</strong><br><br>No wasted inventory. SMS confirmation + reminder the day before.`,
 info:[{l:"Appointment",v:"Thursday 10:00",c:"val-blue"},{l:"Part reserved",v:"Samsung S24 screen ✅",c:"val-green"},{l:"Replenishment",v:"Triggered on confirmation",c:"val-orange"},{l:"Price",v:"€ 129 (locked in)",c:""}],
 choices:[{e:"🔁",m:"Start over — try same-day path",s:"See what happens if you approve immediately",n:0}]},
 
-{img:null,icon:"🚶",om:null,
+{img:null,om:null,
 title:"You walk away.",
 text:`You decide not to go ahead. <strong>No part reserved, no technician time allocated.</strong><br><br>From an OM perspective: <em>lost demand</em> — the customer exits the process before entering it.`,
 choices:[{e:"🔁",m:"Try again — maybe approve this time?",s:"Go back to the beginning",n:0}]},
@@ -168,7 +167,6 @@ function render(idx,dir){
   card.style.opacity='0';card.style.transform=`translateY(${dir>0?'10px':'-10px'})`;
 
   setTimeout(()=>{
-    // scene card
     let h='';
     if(sc.om) h+=`<div class="om-badge">📐 ${sc.om}</div>`;
     h+=`<div class="scene-title">${sc.title}</div>`;
@@ -188,7 +186,6 @@ function render(idx,dir){
     }
     card.innerHTML=h;
 
-    // choices
     let ch='';
     sc.choices.forEach(c=>{
       const cls=c.hi==='green'?'choice-btn green-btn':'choice-btn';
@@ -196,13 +193,11 @@ function render(idx,dir){
     });
     choicesEl.innerHTML=ch;
 
-    // progress
     const pct=Math.round((idx/(S.length-1))*100);
     document.getElementById('prog-fill').style.width=pct+'%';
     document.getElementById('prog-step').textContent=`Step ${idx+1} of ${S.length}`;
     document.getElementById('prog-pct').textContent=pct+'%';
 
-    // dots
     const dotsEl=document.getElementById('dots');
     dotsEl.innerHTML='';
     S.forEach((_,i)=>{
@@ -211,7 +206,6 @@ function render(idx,dir){
       dotsEl.appendChild(d);
     });
 
-    // image
     const imgEl=document.getElementById('scene-img');
     if(sc.img){
       imgEl.classList.add('hidden');
@@ -223,14 +217,9 @@ function render(idx,dir){
       imgEl.classList.add('hidden');
     }
 
-    // back button
-    const backBtn=document.getElementById('back-btn');
-    backBtn.disabled=(history.length===0);
-
+    document.getElementById('back-btn').disabled=(history.length===0);
     card.style.transition='opacity .3s ease,transform .3s ease';
     requestAnimationFrame(()=>{card.style.opacity='1';card.style.transform='translateY(0)'});
-
-    // scroll to top
     document.getElementById('scroll-area').scrollTop=0;
   },250);
 }
