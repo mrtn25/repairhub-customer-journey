@@ -75,28 +75,28 @@ html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:
 </div>
 <script>
 const S=[
-{bg:"linear-gradient(135deg,#0a0c14 0%,#1a0800 100%)",img:"images/scene1.png",icon:"😱",om:null,
+{bg:"linear-gradient(135deg,#0a0c14 0%,#1a0800 100%)",img:"images/scene1.jpeg",icon:"😱",om:null,
 title:"Oh no. Your phone just cracked.",visual:"📱💥",
 text:`You drop your phone and the screen shatters. <strong>No insurance, no backup.</strong> As a consultant you need it fixed today.<br><br>Luckily a friend texts you: <em>"There's this place downtown — RepairHub. Super fast, totally legit."</em>`,
 choices:[{e:"🚶",m:"Head to RepairHub",s:"Let's see what this place is about",n:1}]},
 
-{bg:"linear-gradient(135deg,#0a0c14 0%,#0a1628 100%)",img:"images/scene2.png",icon:"🏪",om:"OM: Arrival Queue (Buffer)",
+{bg:"linear-gradient(135deg,#0a0c14 0%,#0a1628 100%)",img:"images/scene2.jpeg",icon:"🏪",om:"OM: Arrival Queue (Buffer)",
 title:"You arrive at RepairHub.",visual:"🏙️🚶‍♂️➡️🏪",
 text:`The store is clean and modern. A short queue forms at the entrance counter — this is the <strong>arrival buffer</strong>, holding customers until the counter is free.<br><br>You wait about <strong>3 minutes</strong>.`,
 choices:[{e:"➡️",m:"Walk up to the counter",s:"It's your turn",n:2}]},
 
-{bg:"linear-gradient(135deg,#0a0c14 0%,#00101a 100%)",img:"images/scene3.png",icon:"📷",om:"OM: Activity — Counter Registration",
+{bg:"linear-gradient(135deg,#0a0c14 0%,#00101a 100%)",img:"images/scene3.jpeg",icon:"📷",om:"OM: Activity — Counter Registration",
 title:"Place your phone under the camera.",visual:"📱🔍💻",
 text:`The counter has a <strong>built-in camera and a touchscreen tablet</strong>. You place your cracked phone under the camera. It scans instantly.<br><br>You confirm on the tablet: <strong>Samsung Galaxy S24</strong>. Damage: <em>Cracked screen</em>. The AI cross-references camera image with your selection.`,
 choices:[{e:"✅",m:"Confirm: Samsung Galaxy S24, cracked screen",s:"System recognises your model automatically",n:3}]},
 
-{bg:"linear-gradient(135deg,#0a0c14 0%,#0d0a1f 100%)",img:"images/scene4.png",icon:"🤖",om:"OM: AI Diagnosis + Inventory Check (ROP) + VUT Queueing",
+{bg:"linear-gradient(135deg,#0a0c14 0%,#0d0a1f 100%)",img:"images/scene4.jpeg",icon:"🤖",om:"OM: AI Diagnosis + Inventory Check (ROP) + VUT Queueing",
 title:"The AI is running its checks…",visual:"⚙️🔄📦",
 text:`In seconds, the AI does three things internally:<br><br><strong>1.</strong> Identifies repair — screen replacement, ~55 min.<br><strong>2.</strong> Checks stock via <strong>Reorder Point (ROP)</strong> — part in stock ✅<br><strong>3.</strong> Calculates your wait using the <strong>VUT queueing model</strong>.`,
 info:[{l:"Repair type",v:"Screen replacement",c:"val-blue"},{l:"Processing time (p_i)",v:"55 min",c:""},{l:"Part in stock?",v:"✅ Yes (qty: 4)",c:"val-green"},{l:"Technicians available",v:"3 working",c:""},{l:"Queue wait (W_q)",v:"~18 min",c:"val-orange"},{l:"Estimated total wait",v:"~73 min",c:"val-orange"}],
 choices:[{e:"👀",m:"See your quote",s:"The system now shows you the full offer",n:4}]},
 
-{bg:"linear-gradient(135deg,#0a0c14 0%,#0a1a0a 100%)",img:"images/scene5.png",icon:"💬",om:"OM: Single Customer Decision Point",
+{bg:"linear-gradient(135deg,#0a0c14 0%,#0a1a0a 100%)",img:"images/scene4.jpeg",icon:"💬",om:"OM: Single Customer Decision Point",
 title:"Here's your personalised quote.",visual:"📋✨",
 text:`The tablet shows you the full offer. <strong>This is the only decision point in the process.</strong> What do you want to do?`,
 info:[{l:"Repair",v:"Screen replacement — Samsung S24",c:"val-blue"},{l:"Price",v:"€ 129",c:""},{l:"Ready by",v:"Today ~14:45",c:"val-green"},{l:"Part",v:"In stock ✅",c:"val-green"},{l:"Warranty",v:"12 months",c:""}],
@@ -106,19 +106,19 @@ choices:[
   {e:"❌",m:"No thanks, I'll pass",s:"Leave without repair — lost demand for the process",n:8}
 ]},
 
-{bg:"linear-gradient(135deg,#0a0c14 0%,#0a0014 100%)",img:"images/scene6.png",icon:"🔧",om:"OM: Repair Queue → Technician Activity → QC",
+{bg:"linear-gradient(135deg,#0a0c14 0%,#0a0014 100%)",img:"images/scene6.jpeg",icon:"🔧",om:"OM: Repair Queue → Technician Activity → QC",
 title:"Your phone is being repaired.",visual:"🔧📱⚡",
 text:`Your job enters the <strong>repair queue</strong>. A technician picks it up and gets to work. You grab a coffee nearby. SMS notification when it's done.<br><br>Technician replaces the screen module, runs diagnostics, then hands to quality control.`,
 stages:["Repair Queue","Disassembly","Screen Replaced","QC & Test","Done ✅"],active:4,
 choices:[{e:"🔔",m:"You got the SMS — pick up your phone!",s:"Quality control passed ✅",n:6}]},
 
-{bg:"linear-gradient(135deg,#0a0c14 0%,#052e16 100%)",img:"images/scene7.png",icon:"🎉",om:"OM: Pickup Buffer → Satisfied Demand",
+{bg:"linear-gradient(135deg,#0a0c14 0%,#052e16 100%)",img:"images/scene7.jpeg",icon:"🎉",om:"OM: Pickup Buffer → Satisfied Demand",
 title:"Your phone is fixed. Good as new.",visual:"📱✨🙌",
 text:`You return to the store. Service advisor hands you your phone — <strong>screen perfect, warranty card inside</strong>. Total time walk-in to pickup: <strong>91 minutes</strong>.<br><br>Same-day promise: <strong>kept</strong>. You're back online.`,
 info:[{l:"Walk-in time",v:"13:10",c:""},{l:"Queue wait",v:"18 min",c:"val-orange"},{l:"Repair time",v:"55 min",c:""},{l:"QC",v:"8 min",c:""},{l:"Pickup",v:"14:41",c:"val-green"},{l:"Total time",v:"91 min ✅",c:"val-green"},{l:"Cost",v:"€ 129",c:""}],
 choices:[{e:"🔁",m:"Play again — try a different path",s:"Go back to the beginning",n:0,hi:"green"}]},
 
-{bg:"linear-gradient(135deg,#0a0c14 0%,#1a0a00 100%)",img:"images/scene8.png",icon:"📅",om:"OM: Scheduled Repair Path — replenishment on confirmation only",
+{bg:"linear-gradient(135deg,#0a0c14 0%,#1a0a00 100%)",img:"images/scene8.jpeg",icon:"📅",om:"OM: Scheduled Repair Path — replenishment on confirmation only",
 title:"Appointment booked. Part reserved.",visual:"📅📦🔒",
 text:`You choose <strong>Thursday 10:00</strong>. The system reserves the part and triggers replenishment <strong>only now — because you confirmed.</strong><br><br>No wasted inventory. SMS confirmation + reminder the day before.`,
 info:[{l:"Appointment",v:"Thursday 10:00",c:"val-blue"},{l:"Part reserved",v:"Samsung S24 screen ✅",c:"val-green"},{l:"Replenishment triggered",v:"On your confirmation",c:"val-orange"},{l:"Price",v:"€ 129 (locked in)",c:""}],
