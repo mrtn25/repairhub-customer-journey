@@ -13,7 +13,12 @@
   --red:#ef4444;--text:#f1f5f9;--muted:#94a3b8;--radius:16px;
 }
 html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
-#app{width:100vw;height:100vh;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+
+/* ── OUTER SHELL ── */
+#shell{display:flex;width:100vw;height:100vh;overflow:hidden;position:relative}
+
+/* ── JOURNEY COLUMN ── */
+#journey{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;overflow:hidden;transition:margin-right .35s ease}
 
 /* TOP BAR */
 #topbar{width:100%;max-width:680px;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;flex-shrink:0}
@@ -22,6 +27,11 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 #back-btn:disabled{opacity:0;pointer-events:none}
 .brand-logo{font-size:18px;font-weight:800;letter-spacing:-.5px}.brand-logo span{color:var(--blue)}
 .brand-tag{font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:99px;padding:3px 10px}
+#topbar-right{display:flex;align-items:center;gap:8px}
+
+/* OM TOGGLE BTN */
+#om-toggle{background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:99px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:5px;transition:all .18s;white-space:nowrap}
+#om-toggle:hover,#om-toggle.active{background:rgba(59,130,246,.15);border-color:var(--blue);color:#93c5fd}
 
 /* PROGRESS */
 #progress-wrap{width:100%;max-width:680px;padding:0 20px 10px;flex-shrink:0}
@@ -29,7 +39,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 .prog-bar-bg{height:3px;background:var(--border);border-radius:99px;overflow:hidden}
 .prog-bar-fill{height:100%;background:var(--blue);border-radius:99px;transition:width .5s ease}
 
-/* SCENE IMAGE — full natural height, no crop */
+/* SCENE IMAGE */
 #scene-img-wrap{width:100%;max-width:680px;padding:0 20px;flex-shrink:0}
 #scene-img{width:100%;height:auto;display:block;border-radius:14px;background:var(--card2);transition:opacity .4s ease}
 #scene-img.hidden{opacity:0}
@@ -49,18 +59,15 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 .scene-title{font-size:21px;font-weight:800;line-height:1.25;margin-bottom:8px;letter-spacing:-.3px}
 .scene-text{font-size:14px;line-height:1.7;color:var(--muted)}
 .scene-text strong{color:var(--text)}
-
 .info-box{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;font-size:13px;line-height:1.6}
 .info-box .row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)}
 .info-box .row:last-child{border-bottom:none}
 .info-box .row .lbl{color:var(--muted)}.info-box .row .val{font-weight:600}
 .val-green{color:#22c55e}.val-orange{color:#f97316}.val-blue{color:#60a5fa}.val-red{color:#ef4444}
-
 .repair-stages{display:flex;gap:6px;flex-wrap:wrap}
 .stage{padding:5px 12px;border-radius:99px;font-size:11px;font-weight:600;background:var(--card2);border:1px solid var(--border);color:var(--muted)}
 .stage.active{background:#1d4ed8;border-color:#3b82f6;color:white}
 .stage.done{background:#14532d;border-color:#22c55e;color:#86efac}
-
 #choices{display:flex;flex-direction:column;gap:8px}
 .choice-btn{background:var(--card2);border:1.5px solid var(--border);color:var(--text);border-radius:12px;padding:13px 16px;font-size:14px;font-weight:500;cursor:pointer;text-align:left;transition:all .18s;display:flex;align-items:center;gap:10px;font-family:'Inter',sans-serif;width:100%}
 .choice-btn:hover{background:var(--blue2);border-color:var(--blue);transform:translateX(3px)}
@@ -69,96 +76,403 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 .choice-btn .tx .sub{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
 .choice-btn:hover .tx .sub{color:#93c5fd}
 .green-btn{background:#14532d;border-color:#22c55e}.green-btn:hover{background:#166534}
+
+/* ── OM PANEL ── */
+#om-panel{
+  width:0;min-width:0;overflow:hidden;
+  background:var(--card);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;
+  transition:width .35s ease,min-width .35s ease;
+  flex-shrink:0;
+}
+#om-panel.open{width:340px;min-width:340px}
+#om-panel-inner{width:340px;display:flex;flex-direction:column;height:100%;padding:20px 16px;overflow-y:auto}
+
+/* panel header */
+.om-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-shrink:0}
+.om-panel-title{font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:7px}
+.om-panel-title span{color:var(--blue)}
+#om-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:2px 6px;border-radius:6px;transition:color .15s}
+#om-close:hover{color:var(--text)}
+
+/* legend */
+.om-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:10px}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted)}
+
+/* active node label */
+#om-active-label{font-size:11px;color:#93c5fd;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);border-radius:8px;padding:7px 11px;margin-bottom:14px;line-height:1.5;min-height:36px;transition:all .3s}
+
+/* SVG flow */
+#om-svg-wrap{flex:1;display:flex;flex-direction:column;gap:0;overflow:visible}
+svg#flow{width:100%;overflow:visible}
+
+/* node states via class on svg elements */
+.n-idle .node-rect,.n-idle .node-tri,.n-idle .node-dia{fill:#181c29;stroke:#334155;stroke-width:1.5}
+.n-active .node-rect,.n-active .node-tri,.n-active .node-dia{fill:#1d4ed8;stroke:#3b82f6;stroke-width:2}
+.n-done .node-rect,.n-done .node-tri,.n-done .node-dia{fill:#14532d;stroke:#22c55e;stroke-width:1.5}
+.n-branch-inactive{opacity:.35}
+
+.node-label{font-family:'Inter',sans-serif;font-size:9px;fill:#94a3b8;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.n-active .node-label{fill:#fff;font-weight:700}
+.n-done .node-label{fill:#86efac}
+
+.flow-arrow{stroke:#334155;stroke-width:1.5;fill:none;marker-end:url(#arr)}
+.flow-arrow-active{stroke:#3b82f6;stroke-width:2;fill:none;marker-end:url(#arr-active)}
+
+/* animated dot */
+#flow-dot{r:5;fill:#3b82f6;filter:drop-shadow(0 0 5px #3b82f6);transition:cx .5s cubic-bezier(.4,0,.2,1),cy .5s cubic-bezier(.4,0,.2,1)}
+
+/* branch labels */
+.branch-pct{font-family:'Inter',sans-serif;font-size:8.5px;fill:#64748b;text-anchor:middle}
+
+@media(max-width:900px){
+  #om-panel.open{position:fixed;right:0;top:0;height:100vh;z-index:100;width:300px;min-width:300px}
+  #om-panel-inner{width:300px}
+}
 </style>
 </head>
 <body>
-<div id="app">
+<div id="shell">
 
-  <div id="topbar">
-    <button id="back-btn" onclick="goBack()">← Back</button>
-    <div style="display:flex;align-items:center;gap:8px">
-      <div class="brand-logo">Repair<span>Hub</span></div>
-      <div class="brand-tag">Customer Journey · OM Capstone</div>
+  <!-- ── JOURNEY ── -->
+  <div id="journey">
+    <div id="topbar">
+      <button id="back-btn" onclick="goBack()">← Back</button>
+      <div id="topbar-right">
+        <div class="brand-logo">Repair<span>Hub</span></div>
+        <div class="brand-tag">Customer Journey · OM Capstone</div>
+        <button id="om-toggle" onclick="toggleOM()" title="Show Operations View">📐 Operations</button>
+      </div>
+    </div>
+
+    <div id="progress-wrap">
+      <div class="prog-label"><span id="prog-step">Step 1 of 9</span><span id="prog-pct">0%</span></div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+
+    <div id="scene-img-wrap">
+      <img id="scene-img" src="" alt="scene" class="hidden" />
+    </div>
+
+    <div id="dots"></div>
+
+    <div id="scroll-area">
+      <div id="scene-card"></div>
+      <div id="choices"></div>
     </div>
   </div>
 
-  <div id="progress-wrap">
-    <div class="prog-label"><span id="prog-step">Step 1 of 9</span><span id="prog-pct">0%</span></div>
-    <div class="prog-bar-bg"><div class="prog-bar-fill" id="prog-fill" style="width:0%"></div></div>
-  </div>
+  <!-- ── OM PANEL ── -->
+  <div id="om-panel">
+    <div id="om-panel-inner">
+      <div class="om-panel-header">
+        <div class="om-panel-title"><span>📐</span> Operations View</div>
+        <button id="om-close" onclick="toggleOM()">✕</button>
+      </div>
 
-  <div id="scene-img-wrap">
-    <img id="scene-img" src="" alt="scene" class="hidden" />
-  </div>
+      <div class="om-legend">
+        <div class="leg-item"><svg width="14" height="14"><rect x="1" y="1" width="12" height="12" rx="2" fill="#181c29" stroke="#334155" stroke-width="1.5"/></svg>Activity</div>
+        <div class="leg-item"><svg width="14" height="14"><polygon points="7,1 13,13 1,13" fill="#181c29" stroke="#334155" stroke-width="1.5"/></svg>Buffer (WIP)</div>
+        <div class="leg-item"><svg width="14" height="14"><polygon points="7,1 13,7 7,13 1,7" fill="#181c29" stroke="#334155" stroke-width="1.5"/></svg>Decision</div>
+        <div class="leg-item"><svg width="10" height="10"><circle cx="5" cy="5" r="4" fill="#3b82f6"/></svg>You are here</div>
+      </div>
 
-  <div id="dots"></div>
+      <div id="om-active-label">👋 Start the journey to see the process in action.</div>
 
-  <div id="scroll-area">
-    <div id="scene-card"></div>
-    <div id="choices"></div>
+      <div id="om-svg-wrap">
+        <svg id="flow" viewBox="0 0 308 700" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+              <path d="M0,0 L7,3.5 L0,7 Z" fill="#334155"/>
+            </marker>
+            <marker id="arr-active" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+              <path d="M0,0 L7,3.5 L0,7 Z" fill="#3b82f6"/>
+            </marker>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- ARROWS (drawn first, behind nodes) -->
+          <!-- demand → arrival buf -->
+          <line class="flow-arrow" x1="154" y1="22" x2="154" y2="48"/>
+          <!-- arrival buf → tray prep -->
+          <line class="flow-arrow" x1="154" y1="90" x2="154" y2="118"/>
+          <!-- tray prep → xray buf -->
+          <line class="flow-arrow" x1="154" y1="158" x2="154" y2="186"/>
+          <!-- xray buf → xray insp -->
+          <line class="flow-arrow" x1="154" y1="228" x2="154" y2="256"/>
+          <!-- xray insp → decision -->
+          <line class="flow-arrow" x1="154" y1="296" x2="154" y2="324"/>
+          <!-- decision → repair buf (90%) -->
+          <line class="flow-arrow" x1="154" y1="366" x2="154" y2="394"/>
+          <!-- repair buf → repair act -->
+          <line class="flow-arrow" x1="154" y1="436" x2="154" y2="464"/>
+          <!-- repair act → qc buf -->
+          <line class="flow-arrow" x1="154" y1="504" x2="154" y2="532"/>
+          <!-- qc buf → pickup -->
+          <line class="flow-arrow" x1="154" y1="574" x2="154" y2="602"/>
+          <!-- pickup → out -->
+          <line class="flow-arrow" x1="154" y1="642" x2="154" y2="668"/>
+          <!-- decision → manual buf (10%) branch right -->
+          <path class="flow-arrow" d="M 186,345 Q 240,345 240,394" id="branch-manual-arrow"/>
+          <!-- manual buf → manual insp -->
+          <line class="flow-arrow" id="branch-manual-arrow2" x1="240" y1="436" x2="240" y2="464"/>
+          <!-- manual insp → qc buf -->
+          <path class="flow-arrow" id="branch-manual-arrow3" d="M 240,504 Q 240,520 190,532"/>
+
+          <!-- NODE GROUPS — each has id for JS control -->
+
+          <!-- DEMAND label (static) -->
+          <text x="154" y="16" font-family="Inter,sans-serif" font-size="9" fill="#64748b" text-anchor="middle">Demand (Customers)</text>
+
+          <!-- 1. Arrival Buffer -->
+          <g id="n-arrival" class="n-idle">
+            <polygon class="node-tri" points="154,50 184,90 124,90"/>
+            <text class="node-label" x="154" y="75">Arrival</text>
+            <text class="node-label" x="154" y="85">Buffer</text>
+          </g>
+
+          <!-- 2. Tray Prep activity -->
+          <g id="n-tray" class="n-idle">
+            <rect class="node-rect" x="104" y="120" width="100" height="36" rx="5"/>
+            <text class="node-label" x="154" y="138">Tray Prep</text>
+          </g>
+
+          <!-- 3. Pre-Xray Buffer -->
+          <g id="n-prexray" class="n-idle">
+            <polygon class="node-tri" points="154,188 184,228 124,228"/>
+            <text class="node-label" x="154" y="213">Pre-Scan</text>
+            <text class="node-label" x="154" y="223">Buffer</text>
+          </g>
+
+          <!-- 4. X-Ray / Scan activity -->
+          <g id="n-xray" class="n-idle">
+            <rect class="node-rect" x="104" y="258" width="100" height="36" rx="5"/>
+            <text class="node-label" x="154" y="272">AI Scan &amp;</text>
+            <text class="node-label" x="154" y="282">Diagnosis</text>
+          </g>
+
+          <!-- 5. Decision diamond -->
+          <g id="n-decision" class="n-idle">
+            <polygon class="node-dia" points="154,326 190,345 154,364 118,345"/>
+            <text class="node-label" x="154" y="341">Approve</text>
+            <text class="node-label" x="154" y="351">repair?</text>
+          </g>
+
+          <!-- Branch labels -->
+          <text class="branch-pct" x="148" y="384">90%</text>
+          <text class="branch-pct" x="215" y="373">10%</text>
+
+          <!-- 6a. Repair Buffer (main path) -->
+          <g id="n-repairbuf" class="n-idle">
+            <polygon class="node-tri" points="154,396 184,436 124,436"/>
+            <text class="node-label" x="154" y="421">Repair</text>
+            <text class="node-label" x="154" y="431">Queue</text>
+          </g>
+
+          <!-- 6b. Manual Inspection buffer (branch) -->
+          <g id="n-manualbuf" class="n-idle n-branch-inactive">
+            <polygon class="node-tri" points="240,396 270,436 210,436"/>
+            <text class="node-label" x="240" y="421">Manual</text>
+            <text class="node-label" x="240" y="431">Queue</text>
+          </g>
+
+          <!-- 7a. Repair activity -->
+          <g id="n-repair" class="n-idle">
+            <rect class="node-rect" x="104" y="466" width="100" height="36" rx="5"/>
+            <text class="node-label" x="154" y="480">Technician</text>
+            <text class="node-label" x="154" y="490">Repair</text>
+          </g>
+
+          <!-- 7b. Manual inspection activity -->
+          <g id="n-manual" class="n-idle n-branch-inactive">
+            <rect class="node-rect" x="190" y="466" width="100" height="36" rx="5"/>
+            <text class="node-label" x="240" y="480">Manual</text>
+            <text class="node-label" x="240" y="490">Inspection</text>
+          </g>
+
+          <!-- 8. QC Buffer -->
+          <g id="n-qcbuf" class="n-idle">
+            <polygon class="node-tri" points="154,534 184,574 124,574"/>
+            <text class="node-label" x="154" y="559">QC &amp; Test</text>
+            <text class="node-label" x="154" y="569">Buffer</text>
+          </g>
+
+          <!-- 9. Pickup activity -->
+          <g id="n-pickup" class="n-idle">
+            <rect class="node-rect" x="104" y="604" width="100" height="36" rx="5"/>
+            <text class="node-label" x="154" y="622">Pickup</text>
+          </g>
+
+          <!-- Satisfied demand label -->
+          <text x="154" y="682" font-family="Inter,sans-serif" font-size="9" fill="#22c55e" text-anchor="middle">✓ Satisfied Demand</text>
+
+          <!-- ANIMATED DOT (on top) -->
+          <circle id="flow-dot" cx="154" cy="16" r="5" fill="#3b82f6" filter="url(#glow)"/>
+        </svg>
+      </div>
+
+      <!-- scheduled path note -->
+      <div id="om-sched-note" style="display:none;margin-top:12px;font-size:10.5px;color:var(--muted);background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:9px 11px;line-height:1.6">
+        📅 <strong style="color:var(--text)">Scheduled path:</strong> Part reserved, replenishment triggered. Customer joins repair queue on appointment day.
+      </div>
+    </div>
   </div>
 
 </div>
 <script>
 const BASE="https://raw.githubusercontent.com/mrtn25/repairhub-customer-journey/main/images/";
+
+// node positions for dot (cx, cy)
+const NODE_POS={
+  "start":    {cx:154,cy:16},
+  "arrival":  {cx:154,cy:70},
+  "tray":     {cx:154,cy:138},
+  "prexray":  {cx:154,cy:208},
+  "xray":     {cx:154,cy:276},
+  "decision": {cx:154,cy:345},
+  "repairbuf":{cx:154,cy:416},
+  "repair":   {cx:154,cy:484},
+  "qcbuf":    {cx:154,cy:554},
+  "pickup":   {cx:154,cy:622},
+  "done":     {cx:154,cy:675},
+  "manualbuf":{cx:240,cy:416},
+  "manual":   {cx:240,cy:484},
+  "scheduled":{cx:154,cy:345},
+  "leave":    {cx:154,cy:345},
+};
+
 const S=[
-{img:BASE+"scene1.jpeg",om:null,
-title:"Oh no. Your phone just cracked.",
-text:`You drop your phone and the screen shatters. <strong>No insurance, no backup.</strong> As a consultant you need it fixed today.<br><br>Luckily a friend texts you: <em>"There's this place downtown — RepairHub. Super fast, totally legit."</em>`,
-choices:[{e:"🚶",m:"Head to RepairHub",s:"Let's see what this place is about",n:1}]},
+{img:BASE+"scene1.jpeg",om:null,node:"start",
+ label:"👋 Start the journey to see the process in action.",
+ title:"Oh no. Your phone just cracked.",
+ text:`You drop your phone and the screen shatters. <strong>No insurance, no backup.</strong> As a consultant you need it fixed today.<br><br>Luckily a friend texts you: <em>"There's this place downtown — RepairHub. Super fast, totally legit."</em>`,
+ choices:[{e:"🚶",m:"Head to RepairHub",s:"Let's see what this place is about",n:1}]},
 
-{img:BASE+"scene2.jpeg",om:"OM: Arrival Queue (Buffer)",
-title:"You arrive at RepairHub.",
-text:`The store is clean and modern. A short queue forms at the entrance — this is the <strong>arrival buffer</strong>, holding customers until the counter is free.<br><br>You wait about <strong>3 minutes</strong>.`,
-choices:[{e:"➡️",m:"Walk up to the counter",s:"It's your turn",n:2}]},
+{img:BASE+"scene2.jpeg",om:"OM: Arrival Queue (Buffer)",node:"arrival",
+ label:"📍 <strong>Arrival Buffer</strong> — you join the waiting queue. Flow items accumulate here until a counter resource is free.",
+ title:"You arrive at RepairHub.",
+ text:`The store is clean and modern. A short queue forms at the entrance — this is the <strong>arrival buffer</strong>, holding customers until the counter is free.<br><br>You wait about <strong>3 minutes</strong>.`,
+ choices:[{e:"➡️",m:"Walk up to the counter",s:"It's your turn",n:2}]},
 
-{img:BASE+"scene3.jpeg",om:"OM: Activity — Counter Registration",
-title:"Place your phone under the camera.",
-text:`The counter has a <strong>built-in camera and a touchscreen tablet</strong>. You place your cracked phone under the camera. It scans instantly.<br><br>You confirm on the tablet: <strong>Samsung Galaxy S24</strong>. Damage: <em>Cracked screen</em>. The AI cross-references the camera image with your selection.`,
-choices:[{e:"✅",m:"Confirm: Samsung Galaxy S24, cracked screen",s:"System recognises your model automatically",n:3}]},
+{img:BASE+"scene3.jpeg",om:"OM: Activity — Counter Registration",node:"tray",
+ label:"⚙️ <strong>Tray Prep / Registration</strong> — camera + tablet activity. Processing time: ~2 min. Resources: 1 counter + AI system.",
+ title:"Place your phone under the camera.",
+ text:`The counter has a <strong>built-in camera and a touchscreen tablet</strong>. You place your cracked phone under the camera. It scans instantly.<br><br>You confirm on the tablet: <strong>Samsung Galaxy S24</strong>. Damage: <em>Cracked screen</em>. The AI cross-references the camera image with your selection.`,
+ choices:[{e:"✅",m:"Confirm: Samsung Galaxy S24, cracked screen",s:"System recognises your model automatically",n:3}]},
 
-{img:BASE+"scene4.jpeg",om:"OM: AI Diagnosis + Inventory Check (ROP) + VUT Queueing",
-title:"The AI is running its checks…",
-text:`In seconds, the AI does three things internally:<br><br><strong>1.</strong> Identifies repair — screen replacement, ~55 min.<br><strong>2.</strong> Checks stock via <strong>Reorder Point (ROP)</strong> — part in stock ✅<br><strong>3.</strong> Calculates your wait using the <strong>VUT queueing model</strong>.`,
-info:[{l:"Repair type",v:"Screen replacement",c:"val-blue"},{l:"Processing time",v:"55 min",c:""},{l:"Part in stock?",v:"✅ Yes (qty: 4)",c:"val-green"},{l:"Technicians available",v:"3 working",c:""},{l:"Queue wait (W_q)",v:"~18 min",c:"val-orange"},{l:"Estimated total",v:"~73 min",c:"val-orange"}],
-choices:[{e:"👀",m:"See your quote",s:"The system now shows you the full offer",n:4}]},
+{img:BASE+"scene4.jpeg",om:"OM: AI Diagnosis + Inventory Check (ROP) + VUT Queueing",node:"xray",
+ label:"🔍 <strong>AI Scan & Diagnosis</strong> — identifies model, classifies repair, checks ROP inventory, estimates W_q via VUT model.",
+ title:"The AI is running its checks…",
+ text:`In seconds, the AI does three things internally:<br><br><strong>1.</strong> Identifies repair — screen replacement, ~55 min.<br><strong>2.</strong> Checks stock via <strong>Reorder Point (ROP)</strong> — part in stock ✅<br><strong>3.</strong> Calculates your wait using the <strong>VUT queueing model</strong>.`,
+ info:[{l:"Repair type",v:"Screen replacement",c:"val-blue"},{l:"Processing time",v:"55 min",c:""},{l:"Part in stock?",v:"✅ Yes (qty: 4)",c:"val-green"},{l:"Technicians available",v:"3 working",c:""},{l:"Queue wait (W_q)",v:"~18 min",c:"val-orange"},{l:"Estimated total",v:"~73 min",c:"val-orange"}],
+ choices:[{e:"👀",m:"See your quote",s:"The system now shows you the full offer",n:4}]},
 
-{img:BASE+"scene4.jpeg",om:"OM: Single Customer Decision Point",
-title:"Here's your personalised quote.",
-text:`The tablet shows you the full offer. <strong>This is the only decision point in the process.</strong> What do you want to do?`,
-info:[{l:"Repair",v:"Screen replacement — Samsung S24",c:"val-blue"},{l:"Price",v:"€ 129",c:""},{l:"Ready by",v:"Today ~14:45",c:"val-green"},{l:"Part",v:"In stock ✅",c:"val-green"},{l:"Warranty",v:"12 months",c:""}],
-choices:[
-  {e:"⚡",m:"Yes — fix it today!",s:"Same-day repair · ready ~14:45 · €129",n:5,hi:"green"},
-  {e:"📅",m:"Book a future appointment",s:"Part reserved, replenishment triggered on confirmation",n:7},
-  {e:"❌",m:"No thanks, I'll pass",s:"Leave without repair — lost demand for the process",n:8}
-]},
+{img:BASE+"scene4.jpeg",om:"OM: Single Customer Decision Point",node:"decision",
+ label:"🔀 <strong>Decision Point</strong> — the only branching node. Customer approves (90% → same-day), schedules (→ future slot), or leaves (lost demand).",
+ title:"Here's your personalised quote.",
+ text:`The tablet shows you the full offer. <strong>This is the only decision point in the process.</strong> What do you want to do?`,
+ info:[{l:"Repair",v:"Screen replacement — Samsung S24",c:"val-blue"},{l:"Price",v:"€ 129",c:""},{l:"Ready by",v:"Today ~14:45",c:"val-green"},{l:"Part",v:"In stock ✅",c:"val-green"},{l:"Warranty",v:"12 months",c:""}],
+ choices:[
+   {e:"⚡",m:"Yes — fix it today!",s:"Same-day repair · ready ~14:45 · €129",n:5,hi:"green"},
+   {e:"📅",m:"Book a future appointment",s:"Part reserved, replenishment triggered on confirmation",n:7},
+   {e:"❌",m:"No thanks, I'll pass",s:"Leave without repair — lost demand for the process",n:8}
+ ]},
 
-{img:BASE+"scene6.jpeg",om:"OM: Repair Queue → Technician Activity → QC",
-title:"Your phone is being repaired.",
-text:`Your job enters the <strong>repair queue</strong>. A technician picks it up and gets to work. You grab a coffee nearby. SMS notification when it's done.<br><br>Technician replaces the screen module, runs diagnostics, then hands to quality control.`,
-stages:["Repair Queue","Disassembly","Screen Replaced","QC & Test","Done ✅"],active:4,
-choices:[{e:"🔔",m:"You got the SMS — pick up your phone!",s:"Quality control passed ✅",n:6}]},
+{img:BASE+"scene6.jpeg",om:"OM: Repair Queue → Technician Activity → QC",node:"repair",
+ label:"🔧 <strong>Technician Repair</strong> — job enters repair queue, technician processes for ~55 min, then QC buffer before pickup.",
+ title:"Your phone is being repaired.",
+ text:`Your job enters the <strong>repair queue</strong>. A technician picks it up and gets to work. You grab a coffee nearby. SMS notification when it's done.<br><br>Technician replaces the screen module, runs diagnostics, then hands to quality control.`,
+ stages:["Repair Queue","Disassembly","Screen Replaced","QC & Test","Done ✅"],active:4,
+ choices:[{e:"🔔",m:"You got the SMS — pick up your phone!",s:"Quality control passed ✅",n:6}]},
 
-{img:BASE+"scene7.jpeg",om:"OM: Pickup Buffer → Satisfied Demand",
-title:"Your phone is fixed. Good as new.",
-text:`You return to the store. Service advisor hands you your phone — <strong>screen perfect, warranty card inside</strong>. Total time walk-in to pickup: <strong>91 minutes</strong>.<br><br>Same-day promise: <strong>kept</strong>. You're back online.`,
-info:[{l:"Walk-in time",v:"13:10",c:""},{l:"Queue wait",v:"18 min",c:"val-orange"},{l:"Repair time",v:"55 min",c:""},{l:"QC",v:"8 min",c:""},{l:"Pickup",v:"14:41",c:"val-green"},{l:"Total time",v:"91 min ✅",c:"val-green"},{l:"Cost",v:"€ 129",c:""}],
-choices:[{e:"🔁",m:"Play again — try a different path",s:"Go back to the beginning",n:0,hi:"green"}]},
+{img:BASE+"scene7.jpeg",om:"OM: Pickup Buffer → Satisfied Demand",node:"done",
+ label:"✅ <strong>Satisfied Demand</strong> — flow item exits the process. Total flow time: 91 min. Same-day SLA met.",
+ title:"Your phone is fixed. Good as new.",
+ text:`You return to the store. Service advisor hands you your phone — <strong>screen perfect, warranty card inside</strong>. Total time walk-in to pickup: <strong>91 minutes</strong>.<br><br>Same-day promise: <strong>kept</strong>. You're back online.`,
+ info:[{l:"Walk-in time",v:"13:10",c:""},{l:"Queue wait",v:"18 min",c:"val-orange"},{l:"Repair time",v:"55 min",c:""},{l:"QC",v:"8 min",c:""},{l:"Pickup",v:"14:41",c:"val-green"},{l:"Total time",v:"91 min ✅",c:"val-green"},{l:"Cost",v:"€ 129",c:""}],
+ choices:[{e:"🔁",m:"Play again — try a different path",s:"Go back to the beginning",n:0,hi:"green"}]},
 
-{img:BASE+"scene8.jpeg",om:"OM: Scheduled Repair — replenishment on confirmation only",
-title:"Appointment booked. Part reserved.",
-text:`You choose <strong>Thursday 10:00</strong>. The system reserves the part and triggers replenishment <strong>only now — because you confirmed.</strong><br><br>No wasted inventory. SMS confirmation + reminder the day before.`,
-info:[{l:"Appointment",v:"Thursday 10:00",c:"val-blue"},{l:"Part reserved",v:"Samsung S24 screen ✅",c:"val-green"},{l:"Replenishment",v:"Triggered on confirmation",c:"val-orange"},{l:"Price",v:"€ 129 (locked in)",c:""}],
-choices:[{e:"🔁",m:"Start over — try same-day path",s:"See what happens if you approve immediately",n:0}]},
+{img:BASE+"scene8.jpeg",om:"OM: Scheduled Repair — replenishment on confirmation only",node:"scheduled",
+ label:"📅 <strong>Scheduled path</strong> — part reserved, replenishment triggered only on confirmation. Customer joins queue on appointment day.",
+ title:"Appointment booked. Part reserved.",
+ text:`You choose <strong>Thursday 10:00</strong>. The system reserves the part and triggers replenishment <strong>only now — because you confirmed.</strong><br><br>No wasted inventory. SMS confirmation + reminder the day before.`,
+ info:[{l:"Appointment",v:"Thursday 10:00",c:"val-blue"},{l:"Part reserved",v:"Samsung S24 screen ✅",c:"val-green"},{l:"Replenishment",v:"Triggered on confirmation",c:"val-orange"},{l:"Price",v:"€ 129 (locked in)",c:""}],
+ choices:[{e:"🔁",m:"Start over — try same-day path",s:"See what happens if you approve immediately",n:0}]},
 
-{img:null,om:null,
-title:"You walk away.",
-text:`You decide not to go ahead. <strong>No part reserved, no technician time allocated.</strong><br><br>From an OM perspective: <em>lost demand</em> — the customer exits the process before entering it.`,
-choices:[{e:"🔁",m:"Try again — maybe approve this time?",s:"Go back to the beginning",n:0}]},
+{img:null,om:null,node:"leave",
+ label:"❌ <strong>Lost demand</strong> — customer exits without repair. No resources allocated, no inventory consumed.",
+ title:"You walk away.",
+ text:`You decide not to go ahead. <strong>No part reserved, no technician time allocated.</strong><br><br>From an OM perspective: <em>lost demand</em> — the customer exits the process before entering it.`,
+ choices:[{e:"🔁",m:"Try again — maybe approve this time?",s:"Go back to the beginning",n:0}]},
 ];
 
 let history=[];
 let cur=0;
+let omOpen=false;
+
+// All node ids in diagram
+const ALL_NODES=["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf","n-repair","n-qcbuf","n-pickup","n-manualbuf","n-manual"];
+// Map scene node name → which diagram nodes to mark done/active
+const NODE_MAP={
+  "start":    {active:null, done:[], branch:null},
+  "arrival":  {active:"n-arrival", done:[], branch:null},
+  "tray":     {active:"n-tray", done:["n-arrival"], branch:null},
+  "prexray":  {active:"n-prexray", done:["n-arrival","n-tray"], branch:null},
+  "xray":     {active:"n-xray", done:["n-arrival","n-tray","n-prexray"], branch:null},
+  "decision": {active:"n-decision", done:["n-arrival","n-tray","n-prexray","n-xray"], branch:null},
+  "repairbuf":{active:"n-repairbuf", done:["n-arrival","n-tray","n-prexray","n-xray","n-decision"], branch:"main"},
+  "repair":   {active:"n-repair", done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf"], branch:"main"},
+  "qcbuf":    {active:"n-qcbuf", done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf","n-repair"], branch:"main"},
+  "pickup":   {active:"n-pickup", done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf","n-repair","n-qcbuf"], branch:"main"},
+  "done":     {active:null, done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf","n-repair","n-qcbuf","n-pickup"], branch:"main"},
+  "manualbuf":{active:"n-manualbuf", done:["n-arrival","n-tray","n-prexray","n-xray","n-decision"], branch:"manual"},
+  "manual":   {active:"n-manual", done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-manualbuf"], branch:"manual"},
+  "scheduled":{active:"n-decision", done:["n-arrival","n-tray","n-prexray","n-xray"], branch:null},
+  "leave":    {active:"n-decision", done:["n-arrival","n-tray","n-prexray","n-xray"], branch:null},
+};
+
+function updateOMDiagram(nodeKey){
+  const map=NODE_MAP[nodeKey]||NODE_MAP["start"];
+  ALL_NODES.forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    el.classList.remove("n-active","n-done","n-branch-inactive");
+    if(el.id===map.active){
+      el.classList.add("n-active");
+    } else if(map.done.includes(el.id)){
+      el.classList.add("n-done");
+    } else {
+      el.classList.add("n-idle");
+      // dim branch nodes if not on that path
+      if((el.id==="n-manualbuf"||el.id==="n-manual") && map.branch==="main"){
+        el.classList.add("n-branch-inactive");
+      }
+    }
+  });
+
+  // move dot
+  const pos=NODE_POS[nodeKey]||NODE_POS["start"];
+  const dot=document.getElementById("flow-dot");
+  dot.setAttribute("cx",pos.cx);
+  dot.setAttribute("cy",pos.cy);
+
+  // active label
+  const sc=S[cur];
+  document.getElementById("om-active-label").innerHTML=sc.label||"";
+
+  // scheduled note
+  document.getElementById("om-sched-note").style.display=(nodeKey==="scheduled"?"block":"none");
+}
+
+function toggleOM(){
+  omOpen=!omOpen;
+  document.getElementById("om-panel").classList.toggle("open",omOpen);
+  document.getElementById("om-toggle").classList.toggle("active",omOpen);
+  if(omOpen) updateOMDiagram(S[cur].node||"start");
+}
 
 function render(idx,dir){
   const sc=S[idx];
@@ -213,14 +527,15 @@ function render(idx,dir){
       imgEl.onerror=()=>imgEl.classList.add('hidden');
       imgEl.src=sc.img;
     } else {
-      imgEl.src='';
-      imgEl.classList.add('hidden');
+      imgEl.src='';imgEl.classList.add('hidden');
     }
 
     document.getElementById('back-btn').disabled=(history.length===0);
     card.style.transition='opacity .3s ease,transform .3s ease';
     requestAnimationFrame(()=>{card.style.opacity='1';card.style.transform='translateY(0)'});
     document.getElementById('scroll-area').scrollTop=0;
+
+    if(omOpen) updateOMDiagram(sc.node||"start");
   },250);
 }
 
