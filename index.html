@@ -33,7 +33,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 .brand-tag{font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:99px;padding:3px 10px}
 #topbar-right{display:flex;align-items:center;gap:8px}
 
-/* OM TOGGLE — bold blue, always visible */
+/* OM TOGGLE */
 #om-toggle{
   background:linear-gradient(135deg,#1d4ed8,#2563eb);
   border:1.5px solid #3b82f6;
@@ -98,7 +98,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 .stage.active{background:#1d4ed8;border-color:#3b82f6;color:white}
 .stage.done{background:#14532d;border-color:#22c55e;color:#86efac}
 
-/* CHOICE BUTTONS — clearly visible primary style */
+/* CHOICE BUTTONS */
 #choices{display:flex;flex-direction:column;gap:8px}
 .choice-btn{
   background:linear-gradient(135deg,var(--card2),#1e2535);
@@ -124,7 +124,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 .choice-btn .tx .sub{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
 .choice-btn:hover .tx .sub{color:#93c5fd}
 
-/* single-choice next button — extra prominent */
+/* single-choice next button */
 .choice-btn.primary-next{
   background:linear-gradient(135deg,#1d4ed8,#3b82f6);
   border-color:#60a5fa;
@@ -240,7 +240,7 @@ svg#flow{width:100%;max-width:460px;height:auto;overflow:visible}
       <div id="om-active-label">👋 Start the journey to see the process in action.</div>
 
       <div id="om-svg-wrap">
-        <svg id="flow" viewBox="0 0 320 820" xmlns="http://www.w3.org/2000/svg">
+        <svg id="flow" viewBox="0 0 320 900" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <marker id="arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
               <path d="M0,0 L7,3.5 L0,7 Z" fill="#334155"/>
@@ -251,7 +251,7 @@ svg#flow{width:100%;max-width:460px;height:auto;overflow:visible}
             </filter>
           </defs>
 
-          <!-- main vertical arrows -->
+          <!-- main vertical arrows (same-day path) -->
           <line class="flow-arrow" x1="160" y1="24" x2="160" y2="52"/>
           <line class="flow-arrow" x1="160" y1="98" x2="160" y2="126"/>
           <line class="flow-arrow" x1="160" y1="166" x2="160" y2="194"/>
@@ -259,25 +259,31 @@ svg#flow{width:100%;max-width:460px;height:auto;overflow:visible}
           <line class="flow-arrow" x1="160" y1="308" x2="160" y2="336"/>
           <!-- decision → same-day repair queue -->
           <line class="flow-arrow" x1="160" y1="380" x2="160" y2="415"/>
-          <!-- repair queue → technician -->
+          <!-- repair queue → technician repair -->
           <line class="flow-arrow" x1="160" y1="461" x2="160" y2="489"/>
+          <!-- technician repair → QC buffer -->
           <line class="flow-arrow" x1="160" y1="531" x2="160" y2="559"/>
+          <!-- QC buffer → pickup -->
           <line class="flow-arrow" x1="160" y1="601" x2="160" y2="629"/>
+          <!-- pickup → done -->
           <line class="flow-arrow" x1="160" y1="669" x2="160" y2="693"/>
-          <!-- decision → scheduled appt branch (right) -->
+
+          <!-- decision → scheduled branch (right side) -->
           <path class="flow-arrow" d="M 196,358 Q 265,358 265,415"/>
-          <!-- scheduled appt buffer → scheduled appt activity -->
+          <!-- scheduled appt buffer → part order activity -->
           <line class="flow-arrow" x1="265" y1="461" x2="265" y2="489"/>
-          <!-- scheduled appt activity → merges back to repair queue -->
-          <path class="flow-arrow" d="M 265,531 Q 265,548 210,559"/>
+          <!-- part order activity → merges back to REPAIR QUEUE (not QC!) -->
+          <path class="flow-arrow" d="M 265,531 Q 265,546 210,439"/>
 
           <!-- static labels -->
           <text x="160" y="18" font-family="Inter,sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Demand (Customers)</text>
           <text x="160" y="706" font-family="Inter,sans-serif" font-size="10" fill="#22c55e" text-anchor="middle">✓ Satisfied Demand</text>
 
-          <!-- branch % labels -->
+          <!-- branch labels -->
           <text class="branch-pct" x="148" y="405">Same Day</text>
           <text class="branch-pct" x="233" y="390">Scheduled</text>
+          <!-- scheduled merge label -->
+          <text class="branch-pct" x="248" y="498">→ joins repair queue</text>
 
           <!-- 1. Arrival Buffer -->
           <g id="n-arrival" class="n-idle">
@@ -319,13 +325,13 @@ svg#flow{width:100%;max-width:460px;height:auto;overflow:visible}
             <text class="node-label" x="265" y="453">(Scheduled)</text>
           </g>
 
-          <!-- 7a. Technician Repair (Same Day) -->
+          <!-- 7a. Technician Repair -->
           <g id="n-repair" class="n-idle">
             <rect class="node-rect" x="108" y="491" width="104" height="38" rx="5"/>
             <text class="node-label" x="160" y="506">Technician</text>
             <text class="node-label" x="160" y="519">Repair</text>
           </g>
-          <!-- 7b. Scheduled Appt Activity -->
+          <!-- 7b. Part Order & Appt Confirm (scheduled activity) -->
           <g id="n-manual" class="n-idle n-branch-inactive">
             <rect class="node-rect" x="215" y="491" width="102" height="38" rx="5"/>
             <text class="node-label" x="266" y="506">Part Order &amp;</text>
@@ -350,7 +356,7 @@ svg#flow{width:100%;max-width:460px;height:auto;overflow:visible}
       </div>
 
       <div id="om-sched-note" style="display:none;margin-top:10px;font-size:11px;color:var(--muted);background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;line-height:1.6">
-        📅 <strong style="color:var(--text)">Scheduled path:</strong> Part is ordered on confirmation. On appointment day, the part arrives and the job enters the <strong>same repair queue</strong> as same-day customers.
+        📅 <strong style="color:var(--text)">Scheduled path:</strong> Part is ordered on confirmation. On appointment day, the part arrives and the job enters the <strong>same repair queue</strong> as same-day customers → Technician Repair → QC → Pickup.
       </div>
     </div>
   </div>
@@ -360,44 +366,44 @@ svg#flow{width:100%;max-width:460px;height:auto;overflow:visible}
 const BASE="https://raw.githubusercontent.com/mrtn25/repairhub-customer-journey/main/images/";
 
 const NODE_POS={
-  start:    {cx:160,cy:18},
-  arrival:  {cx:160,cy:76},
-  tray:     {cx:160,cy:146},
-  prexray:  {cx:160,cy:217},
-  xray:     {cx:160,cy:287},
-  decision: {cx:160,cy:358},
-  repairbuf:{cx:160,cy:439},
-  repair:   {cx:160,cy:510},
-  qcbuf:    {cx:160,cy:581},
-  pickup:   {cx:160,cy:649},
-  done:     {cx:160,cy:700},
-  manualbuf:{cx:265,cy:439},
-  manual:   {cx:266,cy:510},
-  scheduled:{cx:265,cy:439},
+  start:      {cx:160,cy:18},
+  arrival:    {cx:160,cy:76},
+  tray:       {cx:160,cy:146},
+  prexray:    {cx:160,cy:217},
+  xray:       {cx:160,cy:287},
+  decision:   {cx:160,cy:358},
+  repairbuf:  {cx:160,cy:439},
+  repair:     {cx:160,cy:510},
+  qcbuf:      {cx:160,cy:581},
+  pickup:     {cx:160,cy:649},
+  done:       {cx:160,cy:700},
+  manualbuf:  {cx:265,cy:439},
+  manual:     {cx:266,cy:510},
+  scheduled:  {cx:265,cy:439},
   schedrepair:{cx:160,cy:510},
-  leave:    {cx:160,cy:358},
+  leave:      {cx:160,cy:358},
 };
 
 const S=[
-// 0
+// 0 — cracked phone
 {img:BASE+"scene1.jpeg",om:null,node:"start",
  label:"👋 Start the journey to see the process in action.",
  title:"Oh no. Your phone just cracked.",
  text:`You drop your phone and the screen shatters. <strong>No insurance, no backup.</strong> As a consultant you need it fixed today.<br><br>Luckily a friend texts you: <em>"There's this place downtown — RepairHub. Super fast, totally legit."</em>`,
  choices:[{e:"🚶",m:"Head to RepairHub",s:"Let's see what this place is about",n:1,primary:true}]},
-// 1
+// 1 — arrival
 {img:BASE+"scene2.jpeg",om:"OM: Arrival Queue (Buffer)",node:"arrival",
  label:"📍 <strong>Arrival Buffer</strong> — you join the waiting queue. Flow items accumulate here until a counter resource is free.",
  title:"You arrive at RepairHub.",
  text:`The store is clean and modern. A short queue forms at the entrance — this is the <strong>arrival buffer</strong>, holding customers until the counter is free.<br><br>You wait about <strong>3 minutes</strong>.`,
  choices:[{e:"➡️",m:"Walk up to the counter",s:"It's your turn",n:2,primary:true}]},
-// 2
+// 2 — register & scan
 {img:BASE+"scene3.jpeg",om:"OM: Activity — Register & Scan",node:"tray",
  label:"⚙️ <strong>Register & Scan</strong> — camera + tablet activity. Processing time: ~2 min. Resources: 1 counter + AI system.",
  title:"Place your phone under the camera.",
  text:`The counter has a <strong>built-in camera and a touchscreen tablet</strong>. You place your cracked phone under the camera. It scans instantly.<br><br>You confirm on the tablet: <strong>Samsung Galaxy S24</strong>. Damage: <em>Cracked screen</em>. The AI cross-references the camera image with your selection.`,
  choices:[{e:"✅",m:"Confirm: Samsung Galaxy S24, cracked screen",s:"System recognises your model automatically",n:3,primary:true}]},
-// 3
+// 3 — AI diagnosis
 {img:BASE+"scene4.jpeg",om:"OM: AI Diagnosis + Inventory Check (ROP) + VUT Queueing",node:"xray",
  label:"🔍 <strong>AI Scan & Diagnosis</strong> — identifies model, classifies repair, checks ROP inventory, estimates W_q via VUT model.",
  title:"The AI is running its checks…",
@@ -406,37 +412,55 @@ const S=[
  choices:[{e:"👀",m:"See your quote",s:"The system now shows you the full offer",n:4,primary:true}]},
 // 4 — decision
 {img:BASE+"scene4.jpeg",om:"OM: Customer Decision Point",node:"decision",
- label:"🔀 <strong>Decision Point</strong> — branching node. Same-day (90%) → direct repair queue. Scheduled (10%) → part ordered, joins repair queue on appointment day. Or leave (lost demand).",
+ label:"🔀 <strong>Decision Point</strong> — branching node. Same-day (90%) → repair queue now. Scheduled (10%) → part ordered, joins repair queue on appointment day. Or leave (lost demand).",
  title:"Here's your personalised quote.",
  text:`The tablet shows you the full offer. <strong>This is the only decision point in the process.</strong> What do you want to do?`,
  info:[{l:"Repair",v:"Screen replacement — Samsung S24",c:"val-blue"},{l:"Price",v:"€ 129",c:""},{l:"Ready today",v:"~14:45",c:"val-green"},{l:"Part",v:"In stock ✅",c:"val-green"},{l:"Warranty",v:"12 months",c:""}],
  choices:[
   {e:"⚡",m:"Yes — fix it today! (Same Day)",s:"Enters repair queue now · ready ~14:45 · €129",n:5,hi:"green"},
   {e:"📅",m:"Book a Scheduled Appointment",s:"Part ordered on confirmation · joins repair queue on appt. day",n:7},
-  {e:"❌",m:"No thanks, I'll pass",s:"Leave without repair — lost demand",n:8}
+  {e:"❌",m:"No thanks, I'll pass",s:"Leave without repair — lost demand",n:10}
  ]},
-// 5 — same day repair
+// 5 — same-day repair
 {img:BASE+"scene6.jpeg",om:"OM: Same-Day — Repair Queue → Technician → QC",node:"repair",
  label:"🔧 <strong>Same-Day Repair</strong> — job enters repair queue immediately, technician processes ~55 min, then QC buffer before pickup.",
  title:"Your phone is being repaired.",
  text:`Your job enters the <strong>same-day repair queue</strong>. A technician picks it up and gets to work. You grab a coffee nearby.<br><br>Technician replaces the screen module, runs diagnostics, then hands to quality control.`,
  stages:["Repair Queue","Disassembly","Screen Replaced","QC & Test","Done ✅"],active:4,
  choices:[{e:"🔔",m:"You got the SMS — pick up your phone!",s:"Quality control passed ✅",n:6,primary:true}]},
-// 6 — pickup
+// 6 — same-day pickup
 {img:BASE+"scene7.jpeg",om:"OM: Pickup → Satisfied Demand",node:"done",
  label:"✅ <strong>Satisfied Demand</strong> — flow item exits the process. Total flow time: 91 min. Same-day SLA met.",
  title:"Your phone is fixed. Good as new.",
  text:`You return to the store. Service advisor hands you your phone — <strong>screen perfect, warranty card inside</strong>. Total time: <strong>91 minutes</strong>.<br><br>Same-day promise: <strong>kept</strong>. You're back online.`,
  info:[{l:"Walk-in",v:"13:10",c:""},{l:"Queue wait",v:"18 min",c:"val-orange"},{l:"Repair",v:"55 min",c:""},{l:"QC",v:"8 min",c:""},{l:"Pickup",v:"14:41",c:"val-green"},{l:"Total",v:"91 min ✅",c:"val-green"},{l:"Cost",v:"€ 129",c:""}],
  choices:[{e:"🔁",m:"Play again — try the scheduled path",s:"See what happens if you book an appointment",n:0,hi:"green"}]},
-// 7 — scheduled appointment confirmed
+
+// 7 — scheduled: appointment booked, part ordered
 {img:BASE+"scene8.jpeg",om:"OM: Scheduled Appointment — Part Ordered on Confirmation",node:"scheduled",
  label:"📅 <strong>Scheduled Appointment</strong> — part ordered only on confirmation. On appointment day, part arrives and job enters the same repair queue as same-day customers.",
  title:"Appointment booked. Part being ordered.",
- text:`You choose <strong>Thursday 10:00</strong>. The system confirms your appointment and <strong>triggers the part order now — because you confirmed.</strong><br><br>On Thursday, the part arrives and your job enters the <strong>repair queue</strong> exactly like a same-day customer — no wasted inventory if you hadn't shown up.`,
- info:[{l:"Appointment",v:"Thursday 10:00",c:"val-blue"},{l:"Part status",v:"Ordered on confirmation ⬇️",c:"val-orange"},{l:"Joins repair queue",v:"Thu 10:00 (arrival)",c:"val-green"},{l:"Price",v:"€ 129 (locked in)",c:""}],
- choices:[{e:"🔁",m:"Start over — try same-day path",s:"See what happens if you approve immediately",n:0,hi:"green"}]},
-// 8 — leave
+ text:`You choose <strong>Thursday 10:00</strong>. The system confirms your appointment and <strong>triggers the part order now</strong> — because you confirmed.<br><br>On Thursday, the part arrives and your job enters the <strong>same repair queue</strong> as same-day customers. No wasted inventory if you hadn't shown up.`,
+ info:[{l:"Appointment",v:"Thursday 10:00",c:"val-blue"},{l:"Part status",v:"Ordered on confirmation ⬇️",c:"val-orange"},{l:"Joins repair queue",v:"Thu 10:00 (on arrival)",c:"val-green"},{l:"Price",v:"€ 129 (locked in)",c:""}],
+ choices:[{e:"📅",m:"It's Thursday — you're back at the store",s:"Part arrived, your job enters the repair queue",n:8,primary:true}]},
+
+// 8 — scheduled: repair day (same repair scene as same-day)
+{img:BASE+"scene6.jpeg",om:"OM: Scheduled Repair — Repair Queue → Technician → QC",node:"repair",
+ label:"🔧 <strong>Scheduled Repair</strong> — appointment day. Part arrived, job enters repair queue → technician repair → QC buffer. Same flow as same-day.",
+ title:"One week later. Your phone is being repaired.",
+ text:`You arrive Thursday morning. The part came in overnight. Your job enters the <strong>repair queue</strong> — the same queue same-day customers use.<br><br>A technician replaces the screen, runs full diagnostics, and sends it to quality control. Everything runs exactly like a same-day repair from here.`,
+ stages:["Repair Queue","Disassembly","Screen Replaced","QC & Test","Done ✅"],active:4,
+ choices:[{e:"🔔",m:"SMS received — phone is ready!",s:"Quality control passed ✅ — go pick it up",n:9,primary:true}]},
+
+// 9 — scheduled: happy pickup (same happy ending as same-day)
+{img:BASE+"scene7.jpeg",om:"OM: Pickup → Satisfied Demand (Scheduled Path)",node:"done",
+ label:"✅ <strong>Satisfied Demand</strong> — scheduled flow item exits the process. Total in-store flow time: ~73 min on appointment day.",
+ title:"Perfect. Your phone is back — brand new screen.",
+ text:`You walk out with a <strong>perfectly repaired phone</strong> and a big smile. Warranty card in hand, appointment kept.<br><br>From an OM perspective: the scheduled path added <em>lead time</em> (one week) but the <strong>in-store process was identical</strong> — same repair queue, same technician, same QC.`,
+ info:[{l:"Appointment",v:"Thursday 10:00",c:""},{l:"Queue wait",v:"~5 min",c:"val-green"},{l:"Repair",v:"55 min",c:""},{l:"QC",v:"8 min",c:""},{l:"Out",v:"~11:08",c:"val-green"},{l:"Total in-store",v:"~68 min ✅",c:"val-green"},{l:"Cost",v:"€ 129",c:""}],
+ choices:[{e:"🔁",m:"Play again — try the same-day path",s:"See what happens if you approve immediately",n:0,hi:"green"}]},
+
+// 10 — leave
 {img:null,om:null,node:"leave",
  label:"❌ <strong>Lost demand</strong> — customer exits without repair. No resources allocated, no inventory consumed.",
  title:"You walk away.",
@@ -448,22 +472,22 @@ let history=[],cur=0,omOpen=false;
 
 const ALL_NODES=["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf","n-repair","n-qcbuf","n-pickup","n-manualbuf","n-manual"];
 const NODE_MAP={
-  start:      {active:null,         done:[],                                                                         branch:null},
-  arrival:    {active:"n-arrival",  done:[],                                                                         branch:null},
-  tray:       {active:"n-tray",     done:["n-arrival"],                                                              branch:null},
-  prexray:    {active:"n-prexray",  done:["n-arrival","n-tray"],                                                     branch:null},
-  xray:       {active:"n-xray",     done:["n-arrival","n-tray","n-prexray"],                                         branch:null},
-  decision:   {active:"n-decision", done:["n-arrival","n-tray","n-prexray","n-xray"],                               branch:null},
-  repairbuf:  {active:"n-repairbuf",done:["n-arrival","n-tray","n-prexray","n-xray","n-decision"],                  branch:"main"},
-  repair:     {active:"n-repair",   done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf"],    branch:"main"},
-  qcbuf:      {active:"n-qcbuf",    done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf","n-repair"],branch:"main"},
-  pickup:     {active:"n-pickup",   done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf","n-repair","n-qcbuf"],branch:"main"},
-  done:       {active:null,         done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf","n-repair","n-qcbuf","n-pickup"],branch:"main"},
-  scheduled:  {active:"n-manualbuf",done:["n-arrival","n-tray","n-prexray","n-xray","n-decision"],                  branch:"sched"},
-  schedrepair:{active:"n-repair",   done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-manualbuf","n-manual"],branch:"sched"},
-  leave:      {active:"n-decision", done:["n-arrival","n-tray","n-prexray","n-xray"],                               branch:null},
-  manualbuf:  {active:"n-manualbuf",done:["n-arrival","n-tray","n-prexray","n-xray","n-decision"],                  branch:"sched"},
-  manual:     {active:"n-manual",   done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-manualbuf"],    branch:"sched"},
+  start:      {active:null,          done:[],                                                                                       branch:null},
+  arrival:    {active:"n-arrival",   done:[],                                                                                       branch:null},
+  tray:       {active:"n-tray",      done:["n-arrival"],                                                                            branch:null},
+  prexray:    {active:"n-prexray",   done:["n-arrival","n-tray"],                                                                   branch:null},
+  xray:       {active:"n-xray",      done:["n-arrival","n-tray","n-prexray"],                                                       branch:null},
+  decision:   {active:"n-decision",  done:["n-arrival","n-tray","n-prexray","n-xray"],                                              branch:null},
+  repairbuf:  {active:"n-repairbuf", done:["n-arrival","n-tray","n-prexray","n-xray","n-decision"],                                 branch:"main"},
+  repair:     {active:"n-repair",    done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf"],                   branch:"main"},
+  qcbuf:      {active:"n-qcbuf",     done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf","n-repair"],        branch:"main"},
+  pickup:     {active:"n-pickup",    done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf","n-repair","n-qcbuf"],branch:"main"},
+  done:       {active:null,          done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-repairbuf","n-repair","n-qcbuf","n-pickup"],branch:"main"},
+  scheduled:  {active:"n-manualbuf", done:["n-arrival","n-tray","n-prexray","n-xray","n-decision"],                                 branch:"sched"},
+  schedrepair:{active:"n-repair",    done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-manualbuf","n-manual"],        branch:"sched"},
+  leave:      {active:"n-decision",  done:["n-arrival","n-tray","n-prexray","n-xray"],                                              branch:null},
+  manualbuf:  {active:"n-manualbuf", done:["n-arrival","n-tray","n-prexray","n-xray","n-decision"],                                 branch:"sched"},
+  manual:     {active:"n-manual",    done:["n-arrival","n-tray","n-prexray","n-xray","n-decision","n-manualbuf"],                   branch:"sched"},
 };
 
 function updateOMDiagram(nodeKey){
@@ -517,7 +541,6 @@ function render(idx,dir){
       h+=`</div>`;
     }
     card.innerHTML=h;
-    // choices: single choice gets primary-next styling
     const isSingle=sc.choices.length===1;
     let ch='';
     sc.choices.forEach(c=>{
@@ -527,9 +550,10 @@ function render(idx,dir){
       ch+=`<button class="${cls}" onclick="go(${c.n},1)"><span class="em">${c.e}</span><span class="tx"><span class="main">${c.m}</span><span class="sub">${c.s}</span></span></button>`;
     });
     choicesEl.innerHTML=ch;
-    const pct=Math.round((idx/(S.length-1))*100);
+    const total=S.length;
+    const pct=Math.round((idx/(total-1))*100);
     document.getElementById('prog-fill').style.width=pct+'%';
-    document.getElementById('prog-step').textContent=`Step ${idx+1} of ${S.length}`;
+    document.getElementById('prog-step').textContent=`Step ${idx+1} of ${total}`;
     document.getElementById('prog-pct').textContent=pct+'%';
     const dotsEl=document.getElementById('dots');
     dotsEl.innerHTML='';
